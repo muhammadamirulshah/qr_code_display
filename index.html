@@ -32,6 +32,11 @@
 <h1>User Information</h1>
 <div class="user-info">
 <table>
+
+<tr>
+<td><strong>User ID:</strong></td>
+<td id="user_id"></td>
+</tr>      
 <tr>
 <td><strong>Name:</strong></td>
 <td id="name"></td>
@@ -59,6 +64,7 @@
        function getQueryParams() {
            const params = new URLSearchParams(window.location.search);
            return {
+               user_id: params.get('user_id') || 'Not Provided',  
                name: params.get('name') || 'Not Provided',
                ic: params.get('ic') || 'Not Provided',
                company: params.get('company') || 'Not Provided',
@@ -69,6 +75,7 @@
        // Load the user info from the query parameters
        window.onload = function () {
            const userInfo = getQueryParams();
+           document.getElementById('user_id').textContent = userInfo.user_id;
            document.getElementById('name').textContent = userInfo.name;
            document.getElementById('ic').textContent = userInfo.ic;
            document.getElementById('company').textContent = userInfo.company;
