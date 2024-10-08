@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate QR Code</title>
+<style>
+       body {
+           font-family: Arial, sans-serif;
+           padding: 20px;
+           background-color: #f7f7f7;
+           max-width: 600px;
+           margin: auto;
+       }
+       h1 {
+           text-align: center;
+       }
+       .form-group {
+           margin-bottom: 15px;
+       }
+       label {
+           font-weight: bold;
+       }
+       input[type="text"], input[type="date"] {
+           width: 100%;
+           padding: 8px;
+           margin-top: 5px;
+           margin-bottom: 10px;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+       }
+       button {
+           padding: 10px 15px;
+           background-color: #007bff;
+           color: white;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+       }
+       button:disabled {
+           background-color: #aaa;
+       }
+       button:hover:not(:disabled) {
+           background-color: #0056b3;
+       }
+       #qrCode {
+           margin-top: 20px;
+           text-align: center;
+       }
+       canvas {
+           margin-top: 20px;
+       }
+</style>
+</head>
+<body>
+<h1>QR Code Generator</h1>
+<div class="form-group">
+<label for="name">Name:</label>
+<input type="text" id="name" placeholder="Enter Name">
+</div>
+<div class="form-group">
+<label for="ic">IC:</label>
+<input type="text" id="ic" placeholder="Enter IC">
+</div>
+<div class="form-group">
+<label for="company">Company:</label>
+<input type="text" id="company" placeholder="Enter Company">
+</div>
+<div class="form-group">
+<label for="expiry">Expiry Date:</label>
+<input type="date" id="expiry">
+</div>
+<div class="form-group">
+<label for="carid">Car ID:</label>
+<input type="text" id="carid" placeholder="Enter Car ID">
+</div>
+<button id="generateBtn" onclick="generateQRCode()">Generate QR Code</button>
+<button id="saveBtn" onclick="saveQRCode()" disabled>Save QR Code</button>
+<div id="qrCode"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+       let qr;
+       function generateQRCode() {
+           const name = document.getElementById('name').value;
+           const ic = document.getElementById('ic').value;
+           const company = document.getElementById('company').value;
+           const expiry = document.getElementById('expiry').value;
+           const carid = document.getElementById('carid').value;
+           if (!name || !ic || !company || !expiry || !carid) {
+               alert("Please fill in all fields.");
+               return;
+           }
+           // Data to be encoded in the QR code
+           const qrData = `Name: ${name}\nIC: ${ic}\nCompany: ${company}\nExpiry Date: ${expiry}\nCar ID: ${carid}`;
+           // Clear any previous QR code
+           document.getElementById('qrCode').innerHTML = '';
+           // Generate new QR code
+           qr = new QRCode(document.getElementById("qrCode"), {
+               text: qrData,
+               width: 256,
+               height: 256,
+           });
+           // Enable the save button
+           document.getElementById('saveBtn').disabled = false;
+       }
+       function saveQRCode() {
+           if (!qr) return;
+           const canvas = document.querySelector('#qrCode canvas');
+           const image = canvas.toDataURL("image/png");
+           // Create a temporary link element to trigger download
+           const link = document.createElement('a');
+           link.href = image;
+           link.download = 'qr_code.png';
+           // Programmatically trigger the download
+           link.click();
+       }
+</script>
+</body>
+</html>
